@@ -15,7 +15,8 @@
 #include <limits>
 #include <numeric>
 #include <iterator>
-#include <mpi.h>
+#include "setup_classes.h"
+// #include <mpi.h>
 
 
 constexpr double PI = 3.141592653589793;
@@ -28,19 +29,23 @@ class OBABO{
         const double T;
         const double gamma;
         const double h;
+
         measurement collect_samples(const int N, const bool tavg, const potential POTCLASS);
 
     public:
         // constructors
+        OBABO(double T, double gamma, double h): T{T}, gamma{gamma}, h{h} {
 
-        measurement run_mpi_simulation(int argc, char *argv[], const int N, const potential POTCLASS);  
-        void print_pos_vels();
+        } 
+
+        measurement run_mpi_simulation(const int N, const bool tavg, const potential POTCLASS);  
+        // void print_pos_vels();
         void print_sampler_params();
 
 
 
 
-}
+};
 
 
 
