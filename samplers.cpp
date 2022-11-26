@@ -10,7 +10,7 @@ void OBABO::print_sampler_params(){
 };
 
 
-measurement OBABO::run_mpi_simulation(const int N, const bool tavg, const potential POTCLASS){
+measurement OBABO::run_mpi_simulation(const int N, const bool tavg, const PROBLEM POTCLASS){
     
     int seed = 0;
     measurement RESULTS = OBABO::collect_samples(N, tavg, POTCLASS, seed);
@@ -20,7 +20,7 @@ measurement OBABO::run_mpi_simulation(const int N, const bool tavg, const potent
 
 
 
-measurement OBABO::collect_samples(const int N, const bool tavg, const potential POTCLASS, const int randomseed){
+measurement OBABO::collect_samples(const int N, const bool tavg, PROBLEM problem, const int randomseed){
 
     std:: cout << "Starting OBABO simulation..." << std:: endl;
     print_sampler_params();
@@ -30,11 +30,13 @@ measurement OBABO::collect_samples(const int N, const bool tavg, const potential
     const double a = exp(-1*gamma*h);    
     const double sqrt_a = sqrt(a);
     const double sqrt_aT = sqrt((1-a)*T);
-    const double h_half = 0.5*h; 
+    const double h_half = 0.5*h;   
 
+    size_t No_params = problem.parameters.size();  // number of parameters
 
     // COMPUTE INITIAL FORCES
-
+    problem.compute_force();
+    
     // COMPUTE INITIAL MEASUREMENTS
 
     // PEPARE RNG
@@ -45,38 +47,47 @@ measurement OBABO::collect_samples(const int N, const bool tavg, const potential
     seq.generate(seeds.begin(), seeds.end());
     twister.seed(seeds.at(0)); 
 
-    double Rnx, Rny;
 	std:: normal_distribution<> normal{0,1};
+    double Rn;
 
 
 	auto t1 = std:: chrono::high_resolution_clock::now();
 
     // MAIN LOOP
-    for(size_t i=1; i<=N; ++i){
+    for ( size_t i = 1;  i <= N;  ++i ) {
 
-		Rnx = normal(twister);
-		Rny = normal(twister);
+        // O + B steps
+        for ( size_t j = 0;  j < No_params;  ++j ) {                  
+            
+            Rn = normal(twister);
+            problem.velocities[j] = sqrt_a * problem.velocities[j]  +  sqrt_aT * Rn  +  h_half * problem.forces[j]; 
+        
+        }
 
-        // O STEP, B STEP, ASTEP
-		// theta.px = sqrt_a*theta.px + sqrt_aT*Rnx + h_half*force.fx;  // O+B step		
-		// theta.py = sqrt_a*theta.py + sqrt_aT*Rny + h_half*force.fy;		
-														 
-		// theta.x += h*theta.px;															// A step							
-		// theta.y += h*theta.py;		
+        // A step
+        for ( size_t j = 0; j < No_params;  ++j ) {
+
+            problem.parameters[j] += h * problem.velocities[j];
+        
+        }	
   
         // COMPUTE NEW FORCES
-		// force = get_noisy_force_DW(theta, mu1, mu2, SIG1, SIG2, inv_two_det_SIG1, inv_two_det_SIG2, pref1, pref2, sig);  // HERE FORCES!!!
+        problem.compute_force();
 
         // B STEP
-		// theta.px += h_half*force.fx;													// B step
-		// theta.py += h_half*force.fy;		
+        for ( size_t j = 0; j < No_params;  ++j ) {
 
-		Rnx = normal(twister);
-		Rny = normal(twister);
-
-        // O STEP								 
-		// theta.px = sqrt_a*theta.px + sqrt_aT*Rnx;							 // O step
-		// theta.py = sqrt_a*theta.py + sqrt_aT*Rny;
+            problem.velocities[j] += h_half * problem.forces[j];
+        
+        }   
+	
+        // O STEP
+        for ( size_t j = 0; j < No_params;  ++j ) {
+            
+		    Rn = normal(twister);
+            problem.velocities[j] = sqrt_a * problem.velocities[j]  +  sqrt_aT * Rn;
+        
+        }   								 
 
         // TAKE MEASUREMENT
 		if( i % 5 == 0 ) {
@@ -89,10 +100,7 @@ measurement OBABO::collect_samples(const int N, const bool tavg, const potential
 		
         if( i % int(1e5) == 0 ) std:: cout << "Iteration " << i << " done!\n";
 	
-		// cout << i << " "<< theta.y << " "<< theta.py << " "<< force.fy<<endl;
-	
-
-	}
+	}  // END MAIN LOOP
 
     // FINALIZE
     auto t2 = std:: chrono:: high_resolution_clock:: now();

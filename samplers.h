@@ -19,9 +19,6 @@
 // #include <mpi.h>
 
 
-constexpr double PI = 3.141592653589793;
-constexpr double eps = 1e-12;
-
 
 class OBABO{
 
@@ -30,7 +27,7 @@ class OBABO{
         const double gamma;
         const double h;
 
-        measurement collect_samples(const int N, const bool tavg, const potential POTCLASS, const int randomseed);
+        measurement collect_samples(const int N, const bool tavg, PROBLEM POTCLASS, const int randomseed);
 
     public:
         // constructors
@@ -38,8 +35,8 @@ class OBABO{
 
         } 
 
-        measurement run_mpi_simulation(const int N, const bool tavg, const potential POTCLASS);  
-        // void print_pos_vels();
+        measurement run_mpi_simulation(const int N, const bool tavg, const PROBLEM POTCLASS);  
+
         void print_sampler_params();
 
 
