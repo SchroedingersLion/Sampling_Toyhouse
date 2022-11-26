@@ -30,7 +30,7 @@ class OBABO{
         const double gamma;
         const double h;
 
-        measurement collect_samples(const int N, const bool tavg, const potential POTCLASS);
+        measurement collect_samples(const int N, const bool tavg, const potential POTCLASS, const int randomseed);
 
     public:
         // constructors
