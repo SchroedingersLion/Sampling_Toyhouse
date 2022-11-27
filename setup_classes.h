@@ -4,6 +4,7 @@
 #include <vector>
 #include <cmath>
 #include <math.h>
+#include <fstream>
 
 constexpr double PI = 3.141592653589793;    // some useful constants
 constexpr double eps = 1e-12;
@@ -85,14 +86,28 @@ class measurement{
 
     public:
 
-        void take_measurement(){
+        void take_measurement(std:: vector <double> parameters, std:: vector <double> velocities){
+            
+            x.push_back(parameters[0]);
+            kin_energy.push_back( 0.5* (velocities[0]*velocities[0] + velocities[1]*velocities[1]) );
+        
+        }
+
+        void print_to_csv(){
+
+            std:: ofstream file{"TEST.csv"};
+            std:: cout << "Writing to file...\n";
+
+            for ( size_t i = 0; i<x.size(); ++i )
+            {
+                file << 5*i << " " << x.at(i) << " " << kin_energy.at(i) <<  "\n";   // CARE: magic number 5 needs to be turned to variable.
+            }
+            file.close();
 
         }
 
-
-    private:
-
-        std:: vector <double> x; INIT
+        std:: vector <double> x; 
+        std:: vector <double> kin_energy;
 
 
 

@@ -3,21 +3,22 @@
 int main(int argc, char *argv[]){
 
     double T = 1;
-    double gamma = 10;
+    double gamma = 1;
     double h = 0.01;
 
-    int N = 10000000;
+    int N = 5000000;
     bool tavg = false;
 
     OBABO testsampler(T, gamma, h);
 
-    testsampler.print_sampler_params();
 
-    PROBLEM EMPTY_POT;
-
+    PROBLEM double_well;
     
-    measurement EMPTY_meas = testsampler.run_mpi_simulation(N, tavg, EMPTY_POT);
+    measurement results = testsampler.run_mpi_simulation(N, tavg, double_well);
 
+    results.print_to_csv();
+
+    return 0;
 
 
 }

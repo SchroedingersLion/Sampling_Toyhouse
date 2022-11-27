@@ -5,7 +5,7 @@
 void OBABO::print_sampler_params(){
     
     std:: cout << "Sampler parameters:\n";
-    std:: cout << "Temperature = " << T << ",\nFriction = " << gamma << ",\nStepsize = " << h << "." << std:: endl; 
+    std:: cout << "Temperature = " << T << ",\nFriction = " << gamma << ",\nStepsize = " << h << ".\n" << std:: endl; 
 
 };
 
@@ -13,8 +13,11 @@ void OBABO::print_sampler_params(){
 measurement OBABO::run_mpi_simulation(const int N, const bool tavg, const PROBLEM POTCLASS){
     
     int seed = 0;
+    print_sampler_params();
+
     measurement RESULTS = OBABO::collect_samples(N, tavg, POTCLASS, seed);
 
+    return RESULTS;
 
 };
 
@@ -22,9 +25,7 @@ measurement OBABO::run_mpi_simulation(const int N, const bool tavg, const PROBLE
 
 measurement OBABO::collect_samples(const int N, const bool tavg, PROBLEM problem, const int randomseed){
 
-    std:: cout << "Starting OBABO simulation..." << std:: endl;
-    print_sampler_params();
-
+    std:: cout << "Starting OBABO simulation...\n" << std:: endl;
 
     // set integrator constants
     const double a = exp(-1*gamma*h);    
@@ -36,10 +37,12 @@ measurement OBABO::collect_samples(const int N, const bool tavg, PROBLEM problem
 
     // COMPUTE INITIAL FORCES
     problem.compute_force();
-    
-    // COMPUTE INITIAL MEASUREMENTS
 
-    // PEPARE RNG
+    // COMPUTE INITIAL MEASUREMENTS
+    measurement RESULTS;
+    RESULTS.take_measurement(problem.parameters, problem.velocities);
+
+    // PREPARE RNG
     std:: mt19937 twister;
     
     std:: seed_seq seq{1,20,3200,403,5*randomseed+1,12000,73667,9474+randomseed,19151-randomseed};
@@ -90,12 +93,9 @@ measurement OBABO::collect_samples(const int N, const bool tavg, PROBLEM problem
         }   								 
 
         // TAKE MEASUREMENT
-		if( i % 5 == 0 ) {
-			// full_force = get_noisy_force_DW(theta, mu1, mu2, SIG1, SIG2, inv_two_det_SIG1, inv_two_det_SIG2, pref1, pref2, 0); 	// HERE FORCES!!!!
-			// meas.Tconf[k] = -0.5 * (theta.x*full_force.fx + theta.y*full_force.fy);
-			// meas.x[k] = theta.x;
-			// // meas.dist_err[k] = get_dist_err(bin_ctr, theo_probs, i+1, nrbins);
-			// ++k;		
+		if( i % 5 == 0 ) {                                                          // turn 5 into variable (needs to be passed 
+            RESULTS.take_measurement(problem.parameters, problem.velocities);       // to measurement print function as well).
+
 		}
 		
         if( i % int(1e5) == 0 ) std:: cout << "Iteration " << i << " done!\n";
@@ -106,9 +106,7 @@ measurement OBABO::collect_samples(const int N, const bool tavg, PROBLEM problem
     auto t2 = std:: chrono:: high_resolution_clock:: now();
 	auto ms_int = std:: chrono:: duration_cast < std:: chrono:: seconds > (t2 - t1);
 	std:: cout << "Execution took " << ms_int.count() << " seconds!\n ";
-
-    // just for testing
-    measurement RESULTS;
+        
     return RESULTS;
 };
 

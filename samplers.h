@@ -32,7 +32,6 @@ class OBABO{
     public:
         // constructors
         OBABO(double T, double gamma, double h): T{T}, gamma{gamma}, h{h} {
-
         } 
 
         measurement run_mpi_simulation(const int N, const bool tavg, const PROBLEM POTCLASS);  
