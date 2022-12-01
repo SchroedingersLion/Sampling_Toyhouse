@@ -41,7 +41,7 @@ class PROBLEM {
             e1 = exp( -inv_two_det_SIG1 * ( SIG1[2]*x_mu_diff1*x_mu_diff1 - 2*SIG1[1]*x_mu_diff1*y_mu_diff1 + SIG1[0]*y_mu_diff1*y_mu_diff1 ) );
             e2 = exp( -inv_two_det_SIG2 * ( SIG2[2]*x_mu_diff2*x_mu_diff2 - 2*SIG2[1]*x_mu_diff2*y_mu_diff2 + SIG2[0]*y_mu_diff2*y_mu_diff2 ) );
 
-            rho = pref1 * e1 + pref2 * e2;  // the density
+            rho = pref1 * det1 * e1  +  pref2 * det2 * e2;  // the density
 
             //force part without noise, i.e. double well
             forces[0] = -1/rho * ( pref1 * e1 * (SIG1[2]*x_mu_diff1 - SIG1[1]*y_mu_diff1)   +   pref2 * e2 * (SIG2[2]*x_mu_diff2 - SIG2[1]*y_mu_diff2) );
@@ -56,8 +56,6 @@ class PROBLEM {
             return;
 
         };
-
-
 
 
     private:

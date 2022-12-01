@@ -34,7 +34,7 @@ class OBABO{
         OBABO(double T, double gamma, double h): T{T}, gamma{gamma}, h{h} {
         } 
 
-        measurement run_mpi_simulation(const int N, const bool tavg, const PROBLEM POTCLASS);  
+        measurement run_mpi_simulation(const int N, const bool tavg, PROBLEM POTCLASS);  
 
         void print_sampler_params();
 

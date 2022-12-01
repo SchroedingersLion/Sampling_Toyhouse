@@ -10,9 +10,9 @@ void OBABO::print_sampler_params(){
 };
 
 
-measurement OBABO::run_mpi_simulation(const int N, const bool tavg, const PROBLEM POTCLASS){
+measurement OBABO::run_mpi_simulation(const int N, const bool tavg, PROBLEM POTCLASS){
     
-    int seed = 0;
+    int seed = 1;
     print_sampler_params();
 
     measurement RESULTS = OBABO::collect_samples(N, tavg, POTCLASS, seed);

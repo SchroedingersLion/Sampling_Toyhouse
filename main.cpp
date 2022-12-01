@@ -6,7 +6,7 @@ int main(int argc, char *argv[]){
     double gamma = 1;
     double h = 0.01;
 
-    int N = 5000000;
+    int N = 50000;
     bool tavg = false;
 
     OBABO testsampler(T, gamma, h);
