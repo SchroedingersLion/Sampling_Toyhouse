@@ -1,5 +1,5 @@
-#ifndef PROBLEM_H
-#define PROBLEM_H
+#ifndef SETUP_CLASSES_H
+#define SETUP_CLASSES_H
 
 #include <vector>
 #include <cmath>
@@ -122,4 +122,4 @@ class measurement{
 };
 
 
-#endif // PROBLEM_H
+#endif // SETUP_CLASSES_H
