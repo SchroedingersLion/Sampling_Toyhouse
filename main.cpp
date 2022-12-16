@@ -14,8 +14,8 @@ int main(int argc, char *argv[]){
     bool tavg = false;      // perform time-average?
     int t_meas = 5;         // take measurement every t_meas iterations (passed to sampler as well as print functions).
 
-    OBABO testsampler(T, gamma, h);     // construct OBABO object defined in header "samplers.h"
-
+    // OBABO testsampler(T, gamma, h);     // construct OBABO object defined in header "samplers.h"
+    SGHMC testsampler(T,gamma,h);
 
     PROBLEM double_well;    /* construct object of the problem class defined by the user in header "setup_classes.h". */
     

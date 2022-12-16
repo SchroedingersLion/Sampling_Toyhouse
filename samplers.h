@@ -30,20 +30,40 @@ class OBABO{
         const double gamma;
         const double h;
 
-        measurement collect_samples(const int N, const bool tavg, PROBLEM POTCLASS, const int randomseed, const int t_meas);  // draws a single sampling trajectory
+        measurement collect_samples(const int max_iter, const bool tavg, PROBLEM POTCLASS, const int randomseed, const int t_meas);  // draws a single sampling trajectory
 
     public:
         // constructors
         OBABO(double T, double gamma, double h): T{T}, gamma{gamma}, h{h} {
         } 
 
-        measurement run_mpi_simulation(const int N, const bool tavg, PROBLEM POTCLASS, const int t_meas);  /* sets up mpi environment and calls "collect_samples" 
+        measurement run_mpi_simulation(const int max_iter, const bool tavg, PROBLEM POTCLASS, const int t_meas);  /* sets up mpi environment and calls "collect_samples" 
                                                                                                               on each process within. Also performs averaging. */
 
         void print_sampler_params();    // print sampler hyperparameters.
 
 };
 
+
+
+class SGHMC{
+
+    private:
+        const double T;
+        const double gamma;
+        const double h;
+
+        measurement collect_samples(const int max_iter, const bool tavg, PROBLEM POTCLASS, const int randomseed, const int t_meas);
+
+    public:
+        SGHMC(double T, double gamma, double h): T{T}, gamma{gamma}, h{h} {
+        }
+
+        measurement run_mpi_simulation(const int max_iter, const bool tavg, PROBLEM POTCLASS, const int t_meas);
+
+        void print_sampler_params();
+
+};
 
 
 
