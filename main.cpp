@@ -10,16 +10,20 @@ int main(int argc, char *argv[]){
     double gamma = 1;
     double h = 0.01;
 
-    int N = 50000;          // no. of iteration
+    int N = 10;          // no. of iteration
     bool tavg = false;      // perform time-average?
-    int t_meas = 5;         // take measurement every t_meas iterations (passed to sampler as well as print functions).
+    int t_meas = 1;         // take measurement every t_meas iterations (passed to sampler as well as print functions).
 
     // OBABO testsampler(T, gamma, h);     // construct OBABO object defined in header "samplers.h"
     SGHMC testsampler(T,gamma,h);
 
-    PROBLEM double_well;    /* construct object of the problem class defined by the user in header "setup_classes.h". */
+    std:: string filename = "GM_data_5000.csv";
+    const int randomseed = 0;
+    const int batchsize = 5;
+
+    PROBLEM gm_mix_esti(filename, batchsize, randomseed);    /* construct object of the problem class defined by the user in header "setup_classes.h". */
     
-    measurement results = testsampler.run_mpi_simulation(N, tavg, double_well, t_meas);  /* run sampler. "measurement" needs to be defined 
+    measurement results = testsampler.run_mpi_simulation(N, tavg, gm_mix_esti, t_meas);  /* run sampler. "measurement" needs to be defined 
                                                                                             by user in header "setup_classes.h". It holds
                                                                                             information of what quantities need to be obtained
                                                                                             by the sampler and how to compute and print them.  */

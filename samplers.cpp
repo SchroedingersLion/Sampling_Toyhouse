@@ -69,7 +69,7 @@ measurement OBABO::collect_samples(const int max_iter, const bool tavg, PROBLEM 
         }
 
         // A step
-        for ( size_t j = 0; j < No_params;  ++j ) {
+        for ( size_t j = 0;  j < No_params;  ++j ) {
 
             problem.parameters[j] += h * problem.velocities[j];
         
@@ -79,14 +79,14 @@ measurement OBABO::collect_samples(const int max_iter, const bool tavg, PROBLEM 
         problem.compute_force();
 
         // B STEP
-        for ( size_t j = 0; j < No_params;  ++j ) {
+        for ( size_t j = 0;  j < No_params;  ++j ) {
 
             problem.velocities[j] += h_half * problem.forces[j];
         
         }   
 	
         // O STEP
-        for ( size_t j = 0; j < No_params;  ++j ) {
+        for ( size_t j = 0;  j < No_params;  ++j ) {
             
 		    Rn = normal(twister);
             problem.velocities[j] = sqrt_a * problem.velocities[j]  +  sqrt_aT * Rn;
@@ -127,7 +127,7 @@ void SGHMC::print_sampler_params(){
 
 measurement SGHMC::run_mpi_simulation(const int max_iter, const bool tavg, PROBLEM POTCLASS, const int t_meas){
     
-    int seed = 1;
+    int seed = 0;
     print_sampler_params();
 
     measurement RESULTS = SGHMC::collect_samples(max_iter, tavg, POTCLASS, seed, t_meas);
