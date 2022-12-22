@@ -11,21 +11,69 @@ void OBABO::print_sampler_params(){
 
 
 
-measurement OBABO::run_mpi_simulation(const int max_iter, const bool tavg, PROBLEM POTCLASS, const int t_meas){
+measurement OBABO::run_mpi_simulation(const int max_iter, PROBLEM POTCLASS, const int t_meas, const bool tavg, const int n_tavg, const int n_dist){
     
-    // code up mpi now
-    int seed = 1;
+    MPI_Init(&argc, &argv);				// initialize MPI, use rank as random seed
+    MPI_Comm comm = MPI_COMM_WORLD;
+    int rank, nr_proc;
+    MPI_Comm_rank(comm, &rank);
+    MPI_Comm_size(comm, &nr_proc);
+
+    const int seed = rank;
+
     print_sampler_params();
+    measurement RESULTS = OBABO::collect_samples(max_iter, POTCLASS, seed, t_meas);    // run sampler
 
-    measurement RESULTS = OBABO::collect_samples(max_iter, tavg, POTCLASS, seed, t_meas);
+    std:: cout << "Rank " << rank << " reached barrier." << std:: endl;
+    MPI_Barrier(comm);
 
-    return RESULTS;
+    // average over results of different processors 
+    measurement RESULTS_AVG;
+    int row_size;
+
+    for ( size_t i = 0;  i < RESULTS.measured_values.size();  ++i){
+        
+        row_size = RESULTS.measured_values[i].size();
+        if( rank==0 ) RESULTS_AVG.measured_values[i].resize( row_size );     // only on rank 0 to save RAM.
+        
+        MPI_Reduce( &RESULTS.measured_values[i], &RESULTS_AVG.measured_values[i], row_size, MPI_DOUBLE, MPI_SUM, 0, comm);   
+        for ( int j = 0;  j < row_size;  ++j ){
+            RESULTS_AVG.measured_values[i][j] /= nr_proc;
+        }
+
+    }	 
+
+    // perform time average, if necessary
+    if( rank==0 ){
+
+        if ( tavg == true ){
+        
+            std:: cout << "Time averaging...\n";
+            for ( size_t row = 0;  row < RESULTS_AVG.measured_values.size();  ++row ){   // t-average one row at a time.
+                
+                for ( int i = RESULTS_AVG.measured_values[row].size() - 1;  i >= 0;  i -= n_dist ){
+                
+                    if ( i <= n_tavg - 1 ) n = i;
+                    for ( int j = i - n_tavg;  j < i;  ++j ){
+                        RESULTS_AVG.measured_values[k][i] += RESULTS_AVG.measured_values[k][j];
+
+                    }
+                    RESULTS_AVG.measured_values[k][i] /= n_tavg + 1;
+
+                }
+            }
+        }
+    }
+
+    MPI_Finalize();
+
+    return RESULTS_AVG;
 
 };
 
 
 
-measurement OBABO::collect_samples(const int max_iter, const bool tavg, PROBLEM problem, const int randomseed, const int t_meas){
+measurement OBABO::collect_samples(const int max_iter, PROBLEM problem, const int randomseed, const int t_meas){
 
     std:: cout << "Starting OBABO simulation...\n" << std:: endl;
 
@@ -131,7 +179,7 @@ measurement SGHMC::run_mpi_simulation(const int max_iter, const bool tavg, PROBL
     int seed = 0;
     print_sampler_params();
 
-    measurement RESULTS = SGHMC::collect_samples(max_iter, tavg, POTCLASS, seed, t_meas);
+    measurement RESULTS = SGHMC::collect_samples(max_iter, POTCLASS, seed, t_meas);
 
     return RESULTS;
 
@@ -140,7 +188,7 @@ measurement SGHMC::run_mpi_simulation(const int max_iter, const bool tavg, PROBL
 
 
 
-measurement SGHMC::collect_samples(const int max_iter, const bool tavg, PROBLEM problem, const int randomseed, const int t_meas){
+measurement SGHMC::collect_samples(const int max_iter, PROBLEM problem, const int randomseed, const int t_meas){
 
     std:: cout << "Starting SGHMC simulation...\n" << std:: endl;
 
