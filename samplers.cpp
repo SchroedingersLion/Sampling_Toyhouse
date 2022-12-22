@@ -16,6 +16,8 @@ measurement OBABO::run_mpi_simulation(const int max_iter, const bool tavg, PROBL
     int seed = 1;
     print_sampler_params();
 
+    // master branch
+
     measurement RESULTS = OBABO::collect_samples(max_iter, tavg, POTCLASS, seed, t_meas);
 
     return RESULTS;
