@@ -13,6 +13,7 @@ void OBABO::print_sampler_params(){
 
 measurement OBABO::run_mpi_simulation(const int max_iter, const bool tavg, PROBLEM POTCLASS, const int t_meas){
     
+    // code up mpi now
     int seed = 1;
     print_sampler_params();
 
