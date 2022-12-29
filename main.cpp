@@ -11,13 +11,14 @@ int main(int argc, char *argv[]){
     double h = 0.01;
 
     int N = 10;             // no. of iteration
-    bool tavg = true;      // perform time-average?
+    bool tavg = true;       // perform time-average?
     int n_tavg = 0;         // t-average over the last n_tavg values.
     int t_meas = 1;         // take measurement every t_meas iterations (passed to sampler as well as print functions).
     int n_dist = 1;         // print and t-average (if activated) only every n_dist-th values.
 
     // OBABO testsampler(T, gamma, h);     // construct OBABO object defined in header "samplers.h"
-    SGHMC testsampler(T,gamma,h);
+    // SGHMC testsampler(T,gamma,h);
+    BBK_AMAGOLD testsampler(T,gamma,h);
 
     std:: string filename = "GM_data_5000.csv";
     const int randomseed = 0;
