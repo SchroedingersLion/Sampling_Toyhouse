@@ -56,10 +56,11 @@ class SGHMC{
         measurement collect_samples(const int max_iter, PROBLEM POTCLASS, const int randomseed, const int t_meas);
 
     public:
+
         SGHMC(double T, double gamma, double h): T{T}, gamma{gamma}, h{h} {
         }
 
-        measurement run_mpi_simulation(const int max_iter, const bool tavg, PROBLEM POTCLASS, const int t_meas);
+        void run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBLEM POTCLASS, const int t_meas, const bool tavg=0, int n_tavg=10, const int n_dist=1);  
 
         void print_sampler_params();
 

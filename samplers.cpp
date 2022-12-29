@@ -35,8 +35,7 @@ void OBABO::run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBL
         
         row_size = RESULTS.measured_values[i].size();
         if( rank==0 ) RESULTS_AVG.measured_values[i].resize( row_size );     // only on rank 0 to save RAM.
-        // RESULTS_AVG.measured_values[i].resize( row_size );
-        // std::cout<<"rank "<<rank<<" reached reduce at i="<<i<<std::endl;
+
         MPI_Reduce( &RESULTS.measured_values[i][0], &RESULTS_AVG.measured_values[i][0], row_size, MPI_DOUBLE, MPI_SUM, 0, comm);
 
     }	 
@@ -77,7 +76,6 @@ void OBABO::run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBL
 
     if ( rank == 0) RESULTS_AVG.print_to_csv(t_meas);     // print to file, as specified by the user in the "measurement" class.
 
-    std::cout<<"reached finalize()"<<std::endl;
     MPI_Finalize();
 
     return;
@@ -186,18 +184,76 @@ void SGHMC::print_sampler_params(){
 
 
 
-
-measurement SGHMC::run_mpi_simulation(const int max_iter, const bool tavg, PROBLEM POTCLASS, const int t_meas){
+void SGHMC::run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBLEM POTCLASS, const int t_meas, const bool tavg, int n_tavg, const int n_dist){
     
-    int seed = 0;
+    MPI_Init(&argc, &argv);				// initialize MPI, use rank as random seed
+    MPI_Comm comm = MPI_COMM_WORLD;
+    int rank, nr_proc;
+    MPI_Comm_rank(comm, &rank);
+    MPI_Comm_size(comm, &nr_proc);
+
+    const int seed = rank;
+
     print_sampler_params();
+    measurement RESULTS = SGHMC::collect_samples(max_iter, POTCLASS, seed, t_meas);    // run sampler
 
-    measurement RESULTS = SGHMC::collect_samples(max_iter, POTCLASS, seed, t_meas);
+    std:: cout << "Rank " << rank << " reached barrier." << std:: endl;
+    MPI_Barrier(comm);
 
-    return RESULTS;
+    // average over results of different processors 
+    measurement RESULTS_AVG;
+    int row_size;
+
+    for ( size_t i = 0;  i < RESULTS.measured_values.size();  ++i){
+        
+        row_size = RESULTS.measured_values[i].size();
+        if( rank==0 ) RESULTS_AVG.measured_values[i].resize( row_size );     // only on rank 0 to save RAM.
+
+        MPI_Reduce( &RESULTS.measured_values[i][0], &RESULTS_AVG.measured_values[i][0], row_size, MPI_DOUBLE, MPI_SUM, 0, comm);
+
+    }	 
+
+    // perform time average, if necessary
+    if( rank==0 ){
+
+        // average over processes
+        std:: cout << "Average over processes..." << std:: endl;
+        for ( size_t i = 0;  i < RESULTS_AVG.measured_values.size();  ++i){
+            row_size = RESULTS_AVG.measured_values[i].size();
+            for ( int j = 0;  j < row_size;  ++j ){
+                RESULTS_AVG.measured_values[i][j] /= nr_proc;
+            }
+        }
+        
+        // time average
+        if ( tavg == true ){
+        
+            std:: cout << "Time averaging...\n";
+            for ( size_t row = 0;  row < RESULTS_AVG.measured_values.size();  ++row ){   // t-average one row at a time.
+                
+                for ( int i = RESULTS_AVG.measured_values[row].size() - 1;  i >= 0;  i -= n_dist ){
+                
+                    if ( i <= n_tavg - 1 ) n_tavg = i;
+                    for ( int j = i - n_tavg;  j < i;  ++j ){
+                        RESULTS_AVG.measured_values[row][i] += RESULTS_AVG.measured_values[row][j];
+
+                    }
+                    RESULTS_AVG.measured_values[row][i] /= n_tavg + 1;
+
+                }
+            }
+        
+        } // end time average
+
+    }
+
+    if ( rank == 0) RESULTS_AVG.print_to_csv(t_meas);     // print to file, as specified by the user in the "measurement" class.
+
+    MPI_Finalize();
+
+    return;
 
 };
-
 
 
 
