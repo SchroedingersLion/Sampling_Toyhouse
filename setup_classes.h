@@ -95,8 +95,8 @@ class measurement{
         void take_measurement(std:: vector <double> parameters, std:: vector <double> velocities){  /* CARE!!! The samplers need this function.
                                                                                                        It needs to be written by the user. */
             
-            x.push_back(parameters[0]);
-            kin_energy.push_back( 0.5* (velocities[0]*velocities[0] + velocities[1]*velocities[1]) );
+            measured_values[0].push_back(parameters[0]);
+            measured_values[1].push_back( 0.5 * (velocities[0]*velocities[0] + velocities[1]*velocities[1]) );
         
         }
 
@@ -108,17 +108,19 @@ class measurement{
             std:: ofstream file{"TEST.csv"};
             std:: cout << "Writing to file...\n";
 
-            for ( size_t i = 0; i<x.size(); ++i )
+            for ( size_t i = 0; i<measured_values[0].size(); ++i )
             {
-                file << i*t_meas << " " << x.at(i) << " " << kin_energy.at(i) <<  "\n";  
-
+                file << i*t_meas << " ";
+                for ( size_t j = 0; j<measured_values.size(); ++j ){
+                    file << measured_values[j][i] << " ";  
+                }
+                file << "\n";
             }
             file.close();
 
         }
 
-        std:: vector <double> x; 
-        std:: vector <double> kin_energy;
+        std:: vector < std::vector <double> > measured_values {2};   // vector of vectors, storing the measured observables in its rows.
 
 };
 
