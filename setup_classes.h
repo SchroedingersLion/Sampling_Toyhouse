@@ -96,7 +96,7 @@ class measurement{
                                                                                                        It needs to be written by the user. */
             
             measured_values[0].push_back(parameters[0]);
-            measured_values[1].push_back( 0.5* (velocities[0]*velocities[0] + velocities[1]*velocities[1]) );
+            measured_values[1].push_back( 0.5 * (velocities[0]*velocities[0] + velocities[1]*velocities[1]) );
         
         }
 
@@ -120,7 +120,7 @@ class measurement{
 
         }
 
-        std:: vector < std::vector <double> > measured_values(2);   // vector of vectors, storing the measured observables in its rows.
+        std:: vector < std::vector <double> > measured_values {2};   // vector of vectors, storing the measured observables in its rows.
 
 };
 
