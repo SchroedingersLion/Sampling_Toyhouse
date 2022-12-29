@@ -316,7 +316,7 @@ measurement SGHMC::collect_samples(const int max_iter, PROBLEM problem, const in
     // FINALIZE
     auto t2 = std:: chrono:: high_resolution_clock:: now();
 	auto ms_int = std:: chrono:: duration_cast < std:: chrono:: seconds > (t2 - t1);
-	std:: cout << "Execution took " << ms_int.count() << " seconds!\n ";
+	std:: cout << "Execution took " << ms_int.count() << " seconds!\n";
         
     return RESULTS;
 

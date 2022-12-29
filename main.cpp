@@ -11,7 +11,7 @@ int main(int argc, char *argv[]){
     double h = 0.01;
 
     int N = 10;             // no. of iteration
-    bool tavg = true;      // perform time-average?
+    bool tavg = true;       // perform time-average?
     int n_tavg = 0;         // t-average over the last n_tavg values.
     int t_meas = 1;         // take measurement every t_meas iterations (passed to sampler as well as print functions).
     int n_dist = 1;         // print and t-average (if activated) only every n_dist-th values.
