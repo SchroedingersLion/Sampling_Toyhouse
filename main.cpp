@@ -17,7 +17,8 @@ int main(int argc, char *argv[]){
     int n_dist = 1;         // print and t-average (if activated) only every n_dist-th values.
 
     // OBABO testsampler(T, gamma, h);     // construct OBABO object defined in header "samplers.h"
-    SGHMC testsampler(T,gamma,h);
+    // SGHMC testsampler(T,gamma,h);
+    BBK_AMAGOLD testsampler(T,gamma,h);
 
     std:: string filename = "GM_data_5000.csv";
     const int randomseed = 0;

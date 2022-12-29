@@ -46,6 +46,7 @@ class OBABO{
 
 
 
+
 class SGHMC{
 
     private:
@@ -66,6 +67,30 @@ class SGHMC{
 
 };
 
+
+
+
+class BBK_AMAGOLD{
+
+    private:
+
+        const double T;
+        const double gamma;
+        const double h;
+
+        measurement collect_samples(const int max_iter, PROBLEM POTCLASS, const int randomseed, const int t_meas);
+
+
+    public:
+
+        BBK_AMAGOLD(double T, double gamma, double h): T{T}, gamma{gamma}, h{h} {   
+        }
+
+    void run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBLEM POTCLASS, const int t_meas, const bool tavg=0, int n_tavg=10, const int n_dist=1);  
+
+    void print_sampler_params();
+
+};
 
 
 
