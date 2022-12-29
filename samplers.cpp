@@ -27,7 +27,7 @@ void OBABO::run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBL
     std:: cout << "Rank " << rank << " reached barrier." << std:: endl;
     MPI_Barrier(comm);
 
-    // average over results of different processors 
+    // sum up results of different processors 
     measurement RESULTS_AVG;
     int row_size;
 
@@ -200,7 +200,7 @@ void SGHMC::run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBL
     std:: cout << "Rank " << rank << " reached barrier." << std:: endl;
     MPI_Barrier(comm);
 
-    // average over results of different processors 
+    // sum up results of different processors 
     measurement RESULTS_AVG;
     int row_size;
 
@@ -213,7 +213,7 @@ void SGHMC::run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBL
 
     }	 
 
-    // perform time average, if necessary
+    // compute average
     if( rank==0 ){
 
         // average over processes
