@@ -37,7 +37,7 @@ class OBABO{
         OBABO(double T, double gamma, double h): T{T}, gamma{gamma}, h{h} {
         } 
 
-        void run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBLEM POTCLASS, const int t_meas, const bool tavg=0, int n_tavg=10, const int n_dist=1);  
+        void run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBLEM POTCLASS, const std:: string outputfile, const int t_meas, const bool tavg=0, int n_tavg=10, const int n_dist=1);  
         /* sets up mpi environment and calls "collect_samples" on each process within. Also performs averaging. */
 
         void print_sampler_params();    // print sampler hyperparameters.
@@ -61,7 +61,7 @@ class SGHMC{
         SGHMC(double T, double gamma, double h): T{T}, gamma{gamma}, h{h} {
         }
 
-        void run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBLEM POTCLASS, const int t_meas, const bool tavg=0, int n_tavg=10, const int n_dist=1);  
+        void run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBLEM POTCLASS, const std:: string outputfile, const int t_meas, const bool tavg=0, int n_tavg=10, const int n_dist=1);  
 
         void print_sampler_params();
 
@@ -86,7 +86,7 @@ class BBK_AMAGOLD{
         BBK_AMAGOLD(double T, double gamma, double h): T{T}, gamma{gamma}, h{h} {   
         }
 
-    void run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBLEM POTCLASS, const int t_meas, const bool tavg=0, int n_tavg=10, const int n_dist=1);  
+    void run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBLEM POTCLASS, const std:: string outputfile, const int t_meas, const bool tavg=0, int n_tavg=10, const int n_dist=1);  
 
     void print_sampler_params();
 

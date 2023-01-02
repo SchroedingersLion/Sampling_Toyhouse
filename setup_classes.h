@@ -100,12 +100,11 @@ class measurement{
         
         }
 
-        void print_to_csv(const int t_meas){    /* print results to file. this routine would be called in the main-file. 
-                                                   It needs to be written by the user. "t_meas" gives the number of sampler iterations 
-                                                   between two measurments (it is passed here to get the correct iteration count in the
-                                                   output file.)*/
+        void print_to_csv(const int t_meas, const std:: string outputname){    /* Print results to file. Routine needs to be written by the user. 
+                                                                                  "t_meas" gives the number of sampler iterations between two measurments 
+                                                                                  (it is passed here to get the correct iteration count in the output file.)*/
 
-            std:: ofstream file{"TEST.csv"};
+            std:: ofstream file{outputname};
             std:: cout << "Writing to file...\n";
 
             for ( size_t i = 0; i<measured_values[0].size(); ++i )

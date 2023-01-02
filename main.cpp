@@ -21,12 +21,13 @@ int main(int argc, char *argv[]){
     BBK_AMAGOLD testsampler(T,gamma,h);
 
     std:: string filename = "GM_data_5000.csv";
+    std:: string outputfile = "RESULTS.csv";
     const int randomseed = 0;
     const int batchsize = 5;
 
     PROBLEM gm_mix_esti(filename, batchsize, randomseed);    /* construct object of the problem class defined by the user in header "setup_classes.h". */
     
-    testsampler.run_mpi_simulation(argc, argv, N, gm_mix_esti, t_meas, tavg, n_tavg, n_dist);  /* run sampler. "measurement" needs to be defined 
+    testsampler.run_mpi_simulation(argc, argv, N, gm_mix_esti, outputfile, t_meas, tavg, n_tavg, n_dist);  /* run sampler. "measurement" needs to be defined 
                                                                                                             by user in header "setup_classes.h". It holds
                                                                                                             information of what quantities need to be obtained
                                                                                                             by the sampler and how to compute and print them.  */

@@ -11,7 +11,7 @@ void OBABO::print_sampler_params(){
 
 
 
-void OBABO::run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBLEM POTCLASS, const int t_meas, const bool tavg, int n_tavg, const int n_dist){
+void OBABO::run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBLEM POTCLASS, const std:: string outputfile, const int t_meas, const bool tavg, int n_tavg, const int n_dist){
     
     MPI_Init(&argc, &argv);				// initialize MPI, use rank as random seed
     MPI_Comm comm = MPI_COMM_WORLD;
@@ -74,7 +74,7 @@ void OBABO::run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBL
 
     }
 
-    if ( rank == 0) RESULTS_AVG.print_to_csv(t_meas);     // print to file, as specified by the user in the "measurement" class.
+    if ( rank == 0) RESULTS_AVG.print_to_csv(t_meas, outputfile);     // print to file, as specified by the user in the "measurement" class.
 
     MPI_Finalize();
 
@@ -184,7 +184,7 @@ void SGHMC::print_sampler_params(){
 
 
 
-void SGHMC::run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBLEM POTCLASS, const int t_meas, const bool tavg, int n_tavg, const int n_dist){
+void SGHMC::run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBLEM POTCLASS, const std:: string outputfile, const int t_meas, const bool tavg, int n_tavg, const int n_dist){
     
     MPI_Init(&argc, &argv);				// initialize MPI, use rank as random seed
     MPI_Comm comm = MPI_COMM_WORLD;
@@ -247,7 +247,7 @@ void SGHMC::run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBL
 
     }
 
-    if ( rank == 0) RESULTS_AVG.print_to_csv(t_meas);     // print to file, as specified by the user in the "measurement" class.
+    if ( rank == 0) RESULTS_AVG.print_to_csv(t_meas, outputfile);     // print to file, as specified by the user in the "measurement" class.
 
     MPI_Finalize();
 
@@ -337,7 +337,7 @@ void BBK_AMAGOLD::print_sampler_params(){
 
 
 
-void BBK_AMAGOLD::run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBLEM POTCLASS, const int t_meas, const bool tavg, int n_tavg, const int n_dist){
+void BBK_AMAGOLD::run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBLEM POTCLASS, const std:: string outputfile, const int t_meas, const bool tavg, int n_tavg, const int n_dist){
     
     MPI_Init(&argc, &argv);				// initialize MPI, use rank as random seed
     MPI_Comm comm = MPI_COMM_WORLD;
@@ -400,7 +400,7 @@ void BBK_AMAGOLD::run_mpi_simulation(int argc, char *argv[], const int max_iter,
 
     }
 
-    if ( rank == 0) RESULTS_AVG.print_to_csv(t_meas);     // print to file, as specified by the user in the "measurement" class.
+    if ( rank == 0) RESULTS_AVG.print_to_csv(t_meas, outputfile);     // print to file, as specified by the user in the "measurement" class.
 
     MPI_Finalize();
 
