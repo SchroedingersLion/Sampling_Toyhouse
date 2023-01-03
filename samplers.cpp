@@ -52,20 +52,24 @@ void OBABO::run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBL
             }
         }
         
-        // time average
+    // time average
         if ( tavg == true ){
-        
+
             std:: cout << "Time averaging...\n";
+            int n_tavg_temp;
+            
             for ( size_t row = 0;  row < RESULTS_AVG.measured_values.size();  ++row ){   // t-average one row at a time.
-                
+            
+                n_tavg_temp = n_tavg;
+            
                 for ( int i = RESULTS_AVG.measured_values[row].size() - 1;  i >= 0;  i -= n_dist ){
                 
-                    if ( i <= n_tavg - 1 ) n_tavg = i;
-                    for ( int j = i - n_tavg;  j < i;  ++j ){
+                    if ( i <= n_tavg_temp - 1 ) n_tavg_temp = i;
+                    for ( int j = i - n_tavg_temp;  j < i;  ++j ){
                         RESULTS_AVG.measured_values[row][i] += RESULTS_AVG.measured_values[row][j];
 
                     }
-                    RESULTS_AVG.measured_values[row][i] /= n_tavg + 1;
+                    RESULTS_AVG.measured_values[row][i] /= (n_tavg_temp + 1);
 
                 }
             }
@@ -225,20 +229,24 @@ void SGHMC::run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBL
             }
         }
         
-        // time average
+    // time average
         if ( tavg == true ){
-        
+
             std:: cout << "Time averaging...\n";
+            int n_tavg_temp;
+            
             for ( size_t row = 0;  row < RESULTS_AVG.measured_values.size();  ++row ){   // t-average one row at a time.
-                
+            
+                n_tavg_temp = n_tavg;
+            
                 for ( int i = RESULTS_AVG.measured_values[row].size() - 1;  i >= 0;  i -= n_dist ){
                 
-                    if ( i <= n_tavg - 1 ) n_tavg = i;
-                    for ( int j = i - n_tavg;  j < i;  ++j ){
+                    if ( i <= n_tavg_temp - 1 ) n_tavg_temp = i;
+                    for ( int j = i - n_tavg_temp;  j < i;  ++j ){
                         RESULTS_AVG.measured_values[row][i] += RESULTS_AVG.measured_values[row][j];
 
                     }
-                    RESULTS_AVG.measured_values[row][i] /= n_tavg + 1;
+                    RESULTS_AVG.measured_values[row][i] /= (n_tavg_temp + 1);
 
                 }
             }
@@ -378,20 +386,24 @@ void BBK_AMAGOLD::run_mpi_simulation(int argc, char *argv[], const int max_iter,
             }
         }
         
-        // time average
+    // time average
         if ( tavg == true ){
-        
+
             std:: cout << "Time averaging...\n";
+            int n_tavg_temp;
+            
             for ( size_t row = 0;  row < RESULTS_AVG.measured_values.size();  ++row ){   // t-average one row at a time.
-                
+            
+                n_tavg_temp = n_tavg;
+            
                 for ( int i = RESULTS_AVG.measured_values[row].size() - 1;  i >= 0;  i -= n_dist ){
                 
-                    if ( i <= n_tavg - 1 ) n_tavg = i;
-                    for ( int j = i - n_tavg;  j < i;  ++j ){
+                    if ( i <= n_tavg_temp - 1 ) n_tavg_temp = i;
+                    for ( int j = i - n_tavg_temp;  j < i;  ++j ){
                         RESULTS_AVG.measured_values[row][i] += RESULTS_AVG.measured_values[row][j];
 
                     }
-                    RESULTS_AVG.measured_values[row][i] /= n_tavg + 1;
+                    RESULTS_AVG.measured_values[row][i] /= (n_tavg_temp + 1);
 
                 }
             }
