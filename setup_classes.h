@@ -100,14 +100,22 @@ class measurement{
         
         }
 
-        void print_to_csv(const int t_meas, const std:: string outputname){    /* Print results to file. Routine needs to be written by the user. 
+        void print_to_csv(const int t_meas, const int n_dist, const std:: string outputname){    /* Print results to file. Routine needs to be written by the user. 
                                                                                   "t_meas" gives the number of sampler iterations between two measurments 
                                                                                   (it is passed here to get the correct iteration count in the output file.)*/
 
             std:: ofstream file{outputname};
             std:: cout << "Writing to file...\n";
 
-            for ( size_t i = 0; i<measured_values[0].size(); ++i )
+            // print out zeroth row separately
+            file << "0" << " ";
+            for ( size_t j = 0; j<measured_values.size(); ++j ){  
+                file << measured_values[j][0] << " ";  
+            }
+            file << "\n";
+
+            // print out every n_dist entries after the 0-th
+            for ( size_t i = (measured_values[0].size()-1) % n_dist; i<measured_values[0].size(); i += n_dist )
             {
                 file << i*t_meas << " ";
                 for ( size_t j = 0; j<measured_values.size(); ++j ){

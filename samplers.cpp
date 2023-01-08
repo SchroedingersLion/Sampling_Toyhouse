@@ -78,7 +78,7 @@ void OBABO::run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBL
 
     }
 
-    if ( rank == 0) RESULTS_AVG.print_to_csv(t_meas, outputfile);     // print to file, as specified by the user in the "measurement" class.
+    if ( rank == 0) RESULTS_AVG.print_to_csv(t_meas, n_dist, outputfile);     // print to file, as specified by the user in the "measurement" class.
 
     MPI_Finalize();
 
@@ -255,7 +255,7 @@ void SGHMC::run_mpi_simulation(int argc, char *argv[], const int max_iter, PROBL
 
     }
 
-    if ( rank == 0) RESULTS_AVG.print_to_csv(t_meas, outputfile);     // print to file, as specified by the user in the "measurement" class.
+    if ( rank == 0) RESULTS_AVG.print_to_csv(t_meas, n_dist, outputfile);     // print to file, as specified by the user in the "measurement" class.
 
     MPI_Finalize();
 
@@ -412,7 +412,7 @@ void BBK_AMAGOLD::run_mpi_simulation(int argc, char *argv[], const int max_iter,
 
     }
 
-    if ( rank == 0) RESULTS_AVG.print_to_csv(t_meas, outputfile);     // print to file, as specified by the user in the "measurement" class.
+    if ( rank == 0) RESULTS_AVG.print_to_csv(t_meas, n_dist, outputfile);     // print to file, as specified by the user in the "measurement" class.
 
     MPI_Finalize();
 
