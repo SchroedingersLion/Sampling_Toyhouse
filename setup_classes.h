@@ -117,6 +117,7 @@ class measurement{
             // print out every n_dist entries after the 0-th
             for ( size_t i = (measured_values[0].size()-1) % n_dist; i<measured_values[0].size(); i += n_dist )
             {
+                if(i==0) continue;
                 file << i*t_meas << " ";
                 for ( size_t j = 0; j<measured_values.size(); ++j ){
                     file << measured_values[j][i] << " ";  
